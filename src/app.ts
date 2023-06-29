@@ -1,9 +1,18 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
+require("dotenv").config({path: './src/dotenv/.env'});
+const NODE_ENV = process.env.NODE_ENV;
+if (NODE_ENV === "development") {
+    console.log("개발환경");
+    require("dotenv").config({path: './src/dotenv/.env.development'});
+} else {
+    console.log('운영환경');
+    require("dotenv").config({path: './src/dotenv/.env.production'})
+}
 
 const app = express();	// express 객체 받아옴
 
-const PORT = 8000;
+const PORT = process.env.PORT || 1234;
 
 app.use(cors()); // CORS 이슈 해결
 app.use(express.urlencoded({ extended: true })); // query 받기
@@ -19,7 +28,6 @@ app.listen(PORT, () => {
     console.log(`
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   ┃   Server listening on port: ${PORT}    ┃
-  ┃     http://localhost:${PORT}/api       ┃
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   `);
 })	// 8000번 포트에서 서버 실행
